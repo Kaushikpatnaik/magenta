@@ -15,45 +15,23 @@
 # Description:
 # Tools and models for using TensorFlow with music and art.
 
-package(
-    default_visibility = ["//visibility:private"],
-    features = ["-layering_check"],
-)
-
 licenses(["notice"])  # Apache 2.0
 
-load(
-    "magenta",
-    "tf_proto_library",
-    "tf_proto_library_py",
-)
-
-tf_proto_library(
-    name = "music_proto",
-    srcs = ["protobuf/music.proto"],
-)
-
-tf_proto_library_py(
-    name = "music_py_pb3",
-    srcs = ["protobuf/music.proto"],
+# The Magenta public API.
+py_library(
+    name = "magenta",
+    srcs = ["__init__.py"],
+    visibility = ["//magenta:__subpackages__"],
+    deps = [
+        ":version",
+        "//magenta/common",
+        "//magenta/music",
+        "//magenta/pipelines",
+        "//magenta/protobuf",
+    ],
 )
 
 py_library(
-    name = "midi_io",
-    srcs = ["lib/midi_io.py"],
-    deps = [
-        ":music_py_pb3",
-        "@pretty_midi//:pretty_midi",
-        "@tf//tensorflow:tensorflow_py",
-    ],
-)
-
-py_test(
-    name = "midi_io_test",
-    srcs = ["lib/midi_io_test.py"],
-    srcs_version = "PY2AND3",
-    deps = [
-        ":midi_io",
-        "@tf//tensorflow:tensorflow_py",
-    ],
+    name = "version",
+    srcs = ["version.py"],
 )
